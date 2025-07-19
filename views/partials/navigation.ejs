@@ -1,3 +1,14 @@
-<nav>
-  <%- nav %>
+<nav class="main-nav">
+  <ul>
+    <li><a href="/" class="<%= (active === 'Home') ? 'active' : '' %>">Home</a></li>
+    <% if (navList && navList.length) { %>
+      <% navList.forEach(function(item) { %>
+        <li>
+          <a href="/inv/type/<%= item.classification_id %>" class="<%= (active === item.classification_name) ? 'active' : '' %>">
+            <%= item.classification_name %>
+          </a>
+        </li>
+      <% }) %>
+    <% } %>
+  </ul>
 </nav> 

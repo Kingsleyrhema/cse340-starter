@@ -12,6 +12,7 @@ const app = express()
 const static = require("./routes/static")
 const inventoryRoute = require("./routes/inventoryRoute")
 const baseController = require("./controllers/baseController")
+const utilities = require("./utilities/")
 
 /*
 ===============================
@@ -29,10 +30,40 @@ app.set("layout", "./layouts/layout") // not at views root
 app.use(static)
 
 // Index route
-app.get("/", baseController.buildHome)
+app.get("/", utilities.handleErrors(baseController.buildHome))
 
 // Inventory routes
 app.use("/inv", inventoryRoute)
+
+// Intentional 500 error test route
+app.get("/error-test", utilities.handleErrors(baseController.triggerError));
+
+// File Not Found Route - must be second to last
+app.use(async (req, res, next) => {
+  const error = new Error('Sorry, we appear to have lost that page.');
+  error.status = 404;
+  next(error);
+});
+
+// Error handler - must be last
+app.use(async (err, req, res, next) => {
+  const navList = await utilities.getClassificationsList();
+  const active = "";
+
+  let message;
+  if (err.status == 404) {
+    message = err.message || 'Sorry, we appear to have lost that page.';
+  } else {
+    message = 'Oh no! There was a crash. Maybe try a different route?';
+  }
+
+  res.render("errors/error", {
+    title: err.status || 'Server Error',
+    message,
+    navList,
+    active
+  });
+});
 
 /* ***********************
  * Local Server Information

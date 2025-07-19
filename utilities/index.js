@@ -28,33 +28,59 @@ Util.getNav = async function () {
 * Build the classification view HTML
 * ************************************ */
 Util.buildClassificationGrid = async function(data){
-  let grid
+  let grid;
   if(data.length > 0){
-    grid = '<ul id="inv-display">'
+    grid = '<ul class="vehicle-grid">';
     data.forEach(vehicle => { 
-      grid += '<li>'
-      grid +=  '<a href="../../inv/detail/'+ vehicle.inv_id 
-      + '" title="View ' + vehicle.inv_make + ' '+ vehicle.inv_model 
-      + 'details"><img src="' + vehicle.inv_thumbnail 
-      +'" alt="Image of '+ vehicle.inv_make + ' ' + vehicle.inv_model 
-      +' on CSE Motors" /></a>'
-      grid += '<div class="namePrice">'
-      grid += '<hr />'
-      grid += '<h2>'
-      grid += '<a href="../../inv/detail/' + vehicle.inv_id +'" title="View ' 
-      + vehicle.inv_make + ' ' + vehicle.inv_model + ' details">' 
-      + vehicle.inv_make + ' ' + vehicle.inv_model + '</a>'
-      grid += '</h2>'
-      grid += '<span>$' 
-      + new Intl.NumberFormat('en-US').format(vehicle.inv_price) + '</span>'
-      grid += '</div>'
-      grid += '</li>'
-    })
-    grid += '</ul>'
+      grid += '<li>';
+      grid +=  `<a href="/inv/detail/${vehicle.inv_id}"><img src="${vehicle.inv_image}" alt=""></a>`;
+      grid +=  `<a href="/inv/detail/${vehicle.inv_id}" class="vehicle-link">${vehicle.inv_make} ${vehicle.inv_model}</a>`;
+      grid +=  `<div class="vehicle-price">$${new Intl.NumberFormat('en-US').format(vehicle.inv_price)}</div>`;
+      grid += '</li>';
+    });
+    grid += '</ul>';
   } else { 
-    grid = '<p class="notice">Sorry, no matching vehicles could be found.</p>'
+    grid = '<p class="notice">Sorry, no matching vehicles could be found.</p>';
   }
-  return grid
+  return grid;
 }
+
+/* **************************************
+* Build the vehicle detail view HTML
+* ************************************ */
+Util.buildDetailHTML = async function(data) {
+  if (!data) {
+    return '<p class="notice">Sorry, vehicle not found.</p>';
+  }
+  let html = `
+    <div class="vehicle-detail-flex">
+      <div class="vehicle-detail-image">
+        <img src="${data.inv_image}" alt="${data.inv_make} ${data.inv_model}">
+      </div>
+      <div class="vehicle-detail-info-box">
+        <h2>${data.inv_year} ${data.inv_make} ${data.inv_model} Details</h2>
+        <div class="vehicle-detail-row"><strong>Price:</strong> $${new Intl.NumberFormat('en-US').format(data.inv_price)}</div>
+        <div class="vehicle-detail-row"><strong>Description:</strong> ${data.inv_description}</div>
+        <div class="vehicle-detail-row"><strong>Color:</strong> ${data.inv_color}</div>
+        <div class="vehicle-detail-row"><strong>Miles:</strong> ${new Intl.NumberFormat('en-US').format(data.inv_miles)}</div>
+      </div>
+    </div>
+  `;
+  return html;
+}
+
+/* ************************
+ * Get classifications list for dynamic navigation
+ ************************** */
+Util.getClassificationsList = async function () {
+  return await invModel.getClassifications();
+}
+
+/* ****************************************
+ * Middleware For Handling Errors
+ * Wrap other function in this for 
+ * General Error Handling
+ **************************************** */
+Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
 
 module.exports = Util 
