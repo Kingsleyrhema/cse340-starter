@@ -1,0 +1,148 @@
+<main class="add-classification-main">
+  <h1><%= title %></h1>
+  <%- messages() %>
+  
+  <% if (errors) { %>
+    <ul class="notice">
+     <% errors.array().forEach(error => { %>
+       <li><%= error.msg %></li>
+  <%  }) %>
+   </ul>
+  <% } %>
+  
+  <form class="add-classification-form" action="/inv/add-classification" method="post">
+    <label for="classification_name">Classification Name:</label>
+    <div class="form-note">
+      Classification name cannot contain spaces or special characters
+    </div>
+    <input 
+      type="text" 
+      name="classification_name" 
+      id="classification_name" 
+      required 
+      pattern="^[a-zA-Z0-9]+$"
+      value="<%= locals.classification_name || '' %>"
+    >
+    
+    <button type="submit">Add Classification</button>
+  </form>
+  
+  <div class="form-actions">
+    <a href="/inv/" class="btn btn-secondary">Back to Management</a>
+  </div>
+</main>
+
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/styles.css">
+
+<style>
+.add-classification-main {
+  max-width: 500px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.add-classification-main h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+}
+
+.add-classification-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.add-classification-form label {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.form-note {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  font-style: italic;
+  margin-bottom: 0.5rem;
+}
+
+.add-classification-form input {
+  padding: 0.75rem;
+  border: 2px solid #ecf0f1;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.add-classification-form input:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.add-classification-form button {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-classification-form button:hover {
+  background: #229954;
+}
+
+.form-actions {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.btn-secondary {
+  background: #95a5a6;
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background: #7f8c8d;
+}
+
+.notice {
+  background: #e74c3c;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  list-style: none;
+}
+
+.notice li {
+  margin-bottom: 0.5rem;
+}
+
+/* Validation styling */
+input:required:invalid, input:focus:invalid {
+  border-color: #e74c3c;
+  background-color: #fdf2f2;
+}
+
+input:required:valid {
+  border-color: #27ae60;
+  background-color: #f8fff8;
+}
+</style> 

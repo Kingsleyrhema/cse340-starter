@@ -1,0 +1,271 @@
+<main class="add-inventory-main">
+  <h1><%= title %></h1>
+  <%- messages() %>
+  
+  <% if (errors) { %>
+    <ul class="notice">
+     <% errors.array().forEach(error => { %>
+       <li><%= error.msg %></li>
+  <%  }) %>
+   </ul>
+  <% } %>
+  
+  <form class="add-inventory-form" action="/inv/add-inventory" method="post">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="inv_make">Make:</label>
+        <input 
+          type="text" 
+          name="inv_make" 
+          id="inv_make" 
+          required 
+          value="<%= locals.inv_make || '' %>"
+        >
+      </div>
+      
+      <div class="form-group">
+        <label for="inv_model">Model:</label>
+        <input 
+          type="text" 
+          name="inv_model" 
+          id="inv_model" 
+          required 
+          value="<%= locals.inv_model || '' %>"
+        >
+      </div>
+    </div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label for="inv_year">Year:</label>
+        <input 
+          type="number" 
+          name="inv_year" 
+          id="inv_year" 
+          required 
+          min="1900" 
+          max="<%= new Date().getFullYear() + 1 %>"
+          value="<%= locals.inv_year || '' %>"
+        >
+      </div>
+      
+      <div class="form-group">
+        <label for="inv_color">Color:</label>
+        <input 
+          type="text" 
+          name="inv_color" 
+          id="inv_color" 
+          required 
+          value="<%= locals.inv_color || '' %>"
+        >
+      </div>
+    </div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label for="inv_price">Price:</label>
+        <input 
+          type="number" 
+          name="inv_price" 
+          id="inv_price" 
+          required 
+          min="0" 
+          step="0.01"
+          value="<%= locals.inv_price || '' %>"
+        >
+      </div>
+      
+      <div class="form-group">
+        <label for="inv_miles">Miles:</label>
+        <input 
+          type="number" 
+          name="inv_miles" 
+          id="inv_miles" 
+          required 
+          min="0"
+          value="<%= locals.inv_miles || '' %>"
+        >
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label for="classification_id">Classification:</label>
+      <%- classificationList %>
+    </div>
+    
+    <div class="form-group">
+      <label for="inv_image">Image Path:</label>
+      <input 
+        type="text" 
+        name="inv_image" 
+        id="inv_image" 
+        required 
+        value="<%= locals.inv_image || '/images/vehicles/no-image.png' %>"
+      >
+    </div>
+    
+    <div class="form-group">
+      <label for="inv_thumbnail">Thumbnail Path:</label>
+      <input 
+        type="text" 
+        name="inv_thumbnail" 
+        id="inv_thumbnail" 
+        required 
+        value="<%= locals.inv_thumbnail || '/images/vehicles/no-image-tn.png' %>"
+      >
+    </div>
+    
+    <div class="form-group">
+      <label for="inv_description">Description:</label>
+      <textarea 
+        name="inv_description" 
+        id="inv_description" 
+        required 
+        rows="4"
+      ><%= locals.inv_description || '' %></textarea>
+    </div>
+    
+    <div class="form-actions">
+      <button type="submit">Add Inventory</button>
+      <a href="/inv/" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</main>
+
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/styles.css">
+
+<style>
+.add-inventory-main {
+  max-width: 800px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.add-inventory-main h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+}
+
+.add-inventory-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.add-inventory-form label {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.add-inventory-form input,
+.add-inventory-form select,
+.add-inventory-form textarea {
+  padding: 0.75rem;
+  border: 2px solid #ecf0f1;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.add-inventory-form input:focus,
+.add-inventory-form select:focus,
+.add-inventory-form textarea:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.add-inventory-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.add-inventory-form button {
+  padding: 0.75rem 1.5rem;
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-inventory-form button:hover {
+  background: #229954;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.btn-secondary {
+  background: #95a5a6;
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background: #7f8c8d;
+}
+
+.notice {
+  background: #e74c3c;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  list-style: none;
+}
+
+.notice li {
+  margin-bottom: 0.5rem;
+}
+
+/* Validation styling */
+input:required:invalid, input:focus:invalid,
+select:required:invalid, select:focus:invalid,
+textarea:required:invalid, textarea:focus:invalid {
+  border-color: #e74c3c;
+  background-color: #fdf2f2;
+}
+
+input:required:valid, select:required:valid, textarea:required:valid {
+  border-color: #27ae60;
+  background-color: #f8fff8;
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+</style> 

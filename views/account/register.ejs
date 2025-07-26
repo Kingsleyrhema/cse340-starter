@@ -1,0 +1,109 @@
+<main class="register-main">
+  <h1><%= title %></h1>
+  <!-- Flash message placeholder -->
+  
+  <% if (errors) { %>
+    <ul class="notice">
+     <% errors.array().forEach(error => { %>
+       <li><%= error.msg %></li>
+  <%  }) %>
+   </ul>
+  <% } %>
+  
+  <form class="register-form" action="/account/register" method="post">
+    <label for="account_firstname">First name</label>
+    <input type="text" name="account_firstname" id="accountFirstname" required value="<%= locals.account_firstname %>">
+    
+    <label for="account_lastname">Last name</label>
+    <input type="text" name="account_lastname" id="accountLastname" required value="<%= locals.account_lastname %>">
+    
+    <label for="account_email">Email address</label>
+    <input type="email" name="account_email" id="accountEmail" required value="<%= locals.account_email %>">
+    
+    <label for="account_password">Password</label>
+    <div class="password-requirements">
+      Passwords must be at least 12 characters and contain at least 1 number, 1 capital letter and 1 special character
+    </div>
+    <input type="password" id="account_password" name="account_password" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$">
+    
+    <button type="submit">Register</button>
+  </form>
+</main>
+
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/styles.css">
+
+<style>
+.register-main {
+  max-width: 400px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 2rem 2.5rem 1.5rem 2.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  color: #222;
+  border: 2px solid #222;
+}
+.register-main h1 {
+  text-align: left;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+}
+.notice {
+  background: #e74c3c;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  list-style: none;
+}
+.notice li {
+  margin-bottom: 0.5rem;
+}
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.register-form label {
+  font-weight: bold;
+  margin-bottom: 0.2rem;
+}
+.register-form input {
+  padding: 0.6rem;
+  border-radius: 3px;
+  border: 2px solid #222;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+.password-requirements {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+  font-style: italic;
+}
+.register-form button {
+  margin-top: 1.2rem;
+  padding: 0.7rem 0;
+  border: none;
+  border-radius: 20px;
+  background: #0074d9;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.register-form button:hover {
+  background: #005fa3;
+}
+/* Validation styling */
+input:required:invalid, input:focus:invalid {
+  border-color: #e74c3c;
+  background-color: #fdf2f2;
+}
+input:required:valid {
+  border-color: #27ae60;
+  background-color: #f8fff8;
+}
+</style> 

@@ -1,0 +1,122 @@
+<main class="login-main">
+  <h1><%= title %></h1>
+  <%- messages() %>
+  
+  <% if (errors) { %>
+    <ul class="notice">
+     <% errors.array().forEach(error => { %>
+       <li><%= error.msg %></li>
+  <%  }) %>
+   </ul>
+  <% } %>
+  
+  <form id="loginForm" action="/account/login" method="post">
+    <label for="account_email">Email:</label>
+    <input type="email" id="account_email" name="account_email" required>
+    
+    <label for="account_password">Password:</label>
+    <div class="password-requirements">
+      Passwords must be at least 12 characters and contain at least 1 number, 1 capital letter and 1 special character
+    </div>
+    <input type="password" id="account_password" name="account_password" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$">
+    
+    <button type="submit">LOGIN</button>
+  </form>
+  <p class="signup-link">No account? <a href="/account/register">Sign-up</a></p>
+</main>
+
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/styles.css">
+
+<style>
+.login-main {
+  max-width: 400px;
+  margin: 40px auto;
+  background: #2c3e50;
+  padding: 2rem 2.5rem 1.5rem 2.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  color: #fff;
+}
+.login-main h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.flash-message {
+  background: #27ae60;
+  color: #fff;
+  padding: 0.8rem 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: bold;
+}
+.notice {
+  background: #e74c3c;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  list-style: none;
+}
+.notice li {
+  margin-bottom: 0.5rem;
+}
+.password-requirements {
+  font-size: 0.9rem;
+  color: #bdc3c7;
+  margin-bottom: 0.5rem;
+  font-style: italic;
+}
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.login-form label {
+  font-weight: bold;
+}
+.login-form input {
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+.login-form button {
+  margin: 1rem auto 0 auto;
+  padding: 0.5rem 2rem;
+  border: none;
+  border-radius: 20px;
+  background: #ecf0f1;
+  color: #2c3e50;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.login-form button:hover {
+  background: #3498db;
+  color: #fff;
+}
+.signup-link {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+.signup-link a {
+  color: #fff;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+.signup-link a:hover {
+  color: #3498db;
+}
+/* Validation styling */
+input:required:invalid, input:focus:invalid {
+  border-color: #e74c3c;
+  background-color: #fdf2f2;
+}
+input:required:valid {
+  border-color: #27ae60;
+  background-color: #f8fff8;
+}
+</style> 

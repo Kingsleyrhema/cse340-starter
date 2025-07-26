@@ -1,0 +1,106 @@
+<main class="management-main">
+  <h1><%= title %></h1>
+  <%- messages() %>
+  
+  <div class="management-links">
+    <div class="management-card">
+      <h2>Add New Classification</h2>
+      <p>Create a new vehicle classification to organize your inventory.</p>
+      <a href="/inv/add-classification" class="btn btn-primary">Add Classification</a>
+    </div>
+    
+    <div class="management-card">
+      <h2>Add New Inventory</h2>
+      <p>Add a new vehicle to your inventory database.</p>
+      <a href="/inv/add-inventory" class="btn btn-primary">Add Inventory</a>
+    </div>
+  </div>
+</main>
+
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/styles.css">
+
+<style>
+.management-main {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 2rem;
+}
+
+.management-main h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+}
+
+.management-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.management-card {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.management-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.management-card h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.management-card p {
+  color: #7f8c8d;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #3498db;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #2980b9;
+  transform: translateY(-2px);
+}
+
+.notice {
+  background: #27ae60;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.error {
+  background: #e74c3c;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+</style> 
