@@ -1,0 +1,124 @@
+<main class="account-management">
+  <h1>Account Management</h1>
+  <%- messages() %>
+  
+  <div class="welcome-message">
+    <h2>Welcome, <%= accountData ? accountData.account_firstname : 'User' %>!</h2>
+    <p>You're logged in.</p>
+  </div>
+  
+  <div class="account-info">
+    <h3>Account Information</h3>
+    <ul>
+      <li><strong>Name:</strong> <%= accountData ? accountData.account_firstname : '' %> <%= accountData ? accountData.account_lastname : '' %></li>
+      <li><strong>Email:</strong> <%= accountData ? accountData.account_email : '' %></li>
+      <li><strong>Account Type:</strong> <%= accountData ? accountData.account_type : '' %></li>
+    </ul>
+  </div>
+  
+  <div class="actions">
+    <a href="/inv/" class="btn">Manage Inventory</a>
+    <a href="/account/logout" class="btn btn-logout">Logout</a>
+  </div>
+</main>
+
+<style>
+.account-management {
+  max-width: 600px;
+  margin: 40px auto;
+  background: #2c3e50;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  color: #fff;
+}
+
+.account-management h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #ecf0f1;
+}
+
+.welcome-message {
+  background: #27ae60;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.welcome-message h2 {
+  margin: 0 0 0.5rem 0;
+  color: #fff;
+}
+
+.welcome-message p {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.account-info {
+  background: #34495e;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.account-info h3 {
+  margin: 0 0 1rem 0;
+  color: #ecf0f1;
+}
+
+.account-info ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.account-info li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #4a5f6f;
+}
+
+.account-info li:last-child {
+  border-bottom: none;
+}
+
+.account-info strong {
+  color: #3498db;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.2s;
+  display: inline-block;
+}
+
+.btn {
+  background: #3498db;
+  color: #fff;
+}
+
+.btn:hover {
+  background: #2980b9;
+  transform: translateY(-2px);
+}
+
+.btn-logout {
+  background: #e74c3c;
+}
+
+.btn-logout:hover {
+  background: #c0392b;
+}
+</style> 

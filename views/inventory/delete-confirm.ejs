@@ -1,0 +1,204 @@
+<main class="delete-confirm-main">
+  <h1><%= title %></h1>
+  <%- messages() %>
+  
+  <% if (errors) { %>
+    <ul class="notice">
+     <% errors.array().forEach(error => { %>
+       <li><%= error.msg %></li>
+  <%  }) %>
+   </ul>
+  <% } %>
+  
+  <div class="delete-warning">
+    <h2>⚠️ Delete Confirmation</h2>
+    <p>Are you sure you want to delete this vehicle? This action cannot be undone.</p>
+  </div>
+  
+  <div class="vehicle-details">
+    <h3>Vehicle Details</h3>
+    <div class="detail-grid">
+      <div class="detail-item">
+        <strong>Make:</strong> <%= inv_make %>
+      </div>
+      <div class="detail-item">
+        <strong>Model:</strong> <%= inv_model %>
+      </div>
+      <div class="detail-item">
+        <strong>Year:</strong> <%= inv_year %>
+      </div>
+      <div class="detail-item">
+        <strong>Color:</strong> <%= inv_color %>
+      </div>
+      <div class="detail-item">
+        <strong>Price:</strong> $<%= new Intl.NumberFormat('en-US').format(inv_price) %>
+      </div>
+      <div class="detail-item">
+        <strong>Miles:</strong> <%= new Intl.NumberFormat('en-US').format(inv_miles) %>
+      </div>
+    </div>
+    
+    <div class="description">
+      <strong>Description:</strong>
+      <p><%= inv_description %></p>
+    </div>
+  </div>
+  
+  <form class="delete-confirm-form" action="/inv/delete" method="post">
+    <input type="hidden" name="inv_id" value="<%= inv_id %>">
+    <input type="hidden" name="inv_make" value="<%= inv_make %>">
+    <input type="hidden" name="inv_model" value="<%= inv_model %>">
+    
+    <div class="form-actions">
+      <button type="submit" class="btn-delete">Delete Vehicle</button>
+      <a href="/inv/" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</main>
+
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/styles.css">
+
+<style>
+.delete-confirm-main {
+  max-width: 600px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.delete-confirm-main h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+}
+
+.delete-warning {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.delete-warning h2 {
+  color: #856404;
+  margin-bottom: 1rem;
+}
+
+.delete-warning p {
+  color: #856404;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.vehicle-details {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.vehicle-details h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.detail-item {
+  padding: 0.5rem;
+  background: #fff;
+  border-radius: 5px;
+  border: 1px solid #e9ecef;
+}
+
+.description {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+  border: 1px solid #e9ecef;
+}
+
+.description p {
+  margin: 0.5rem 0 0 0;
+  line-height: 1.6;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.btn-delete {
+  background: #dc3545;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-delete:hover {
+  background: #c82333;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background: #5a6268;
+}
+
+.notice {
+  background: #e74c3c;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  list-style: none;
+}
+
+.notice li {
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+</style> 

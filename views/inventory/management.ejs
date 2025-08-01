@@ -15,6 +15,19 @@
       <a href="/inv/add-inventory" class="btn btn-primary">Add Inventory</a>
     </div>
   </div>
+
+  <div class="inventory-management-section">
+    <h2>Manage Inventory</h2>
+    <p>Select a classification from the list to see the items belonging to the classification.</p>
+    
+    <div class="classification-select-container">
+      <%- classificationSelect %>
+    </div>
+    
+    <table id="inventoryDisplay"></table>
+    
+    <noscript>JavaScript must be enabled to use this page.</noscript>
+  </div>
 </main>
 
 <link rel="stylesheet" href="/css/main.css">
@@ -103,4 +116,68 @@
   margin-bottom: 1rem;
   text-align: center;
 }
-</style> 
+
+.inventory-management-section {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.inventory-management-section h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.inventory-management-section p {
+  color: #7f8c8d;
+  margin-bottom: 1.5rem;
+}
+
+.classification-select-container {
+  margin-bottom: 2rem;
+}
+
+.classification-select-container select {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  min-width: 200px;
+}
+
+#inventoryDisplay {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+#inventoryDisplay thead th {
+  background: #34495e;
+  color: #fff;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+#inventoryDisplay tbody td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #ddd;
+}
+
+#inventoryDisplay tbody tr:hover {
+  background: #f8f9fa;
+}
+
+#inventoryDisplay a {
+  color: #3498db;
+  text-decoration: none;
+  margin-right: 1rem;
+}
+
+#inventoryDisplay a:hover {
+  text-decoration: underline;
+}
+</style>
+
+<script src="../../js/inventory.js"></script> 
