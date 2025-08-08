@@ -52,6 +52,63 @@ validate.registationRules = () => {
   ]
 }
 
+/*  **********************************
+ *  Update Account Data Validation Rules
+ * ********************************* */
+validate.updateAccountRules = () => {
+  return [
+    // firstname is required and must be string
+    body("account_firstname")
+      .trim()
+      .escape()
+      .notEmpty()
+      .isLength({ min: 1 })
+      .withMessage("Please provide a first name."),
+
+    // lastname is required and must be string
+    body("account_lastname")
+      .trim()
+      .escape()
+      .notEmpty()
+      .isLength({ min: 2 })
+      .withMessage("Please provide a last name."),
+
+    // valid email is required and cannot already exist in the database (except for current user)
+    body("account_email")
+      .trim()
+      .isEmail()
+      .normalizeEmail()
+      .withMessage("A valid email is required.")
+      .custom(async (account_email, { req }) => {
+        const emailExists = await accountModel.checkExistingEmail(account_email)
+        const currentAccount = await accountModel.getAccountById(req.body.account_id)
+        if (emailExists && currentAccount.account_email !== account_email){
+          throw new Error("Email exists. Please use a different email")
+        }
+      }),
+  ]
+}
+
+/*  **********************************
+ *  Update Password Data Validation Rules
+ * ********************************* */
+validate.updatePasswordRules = () => {
+  return [
+    // password is required and must be strong password
+    body("account_password")
+      .trim()
+      .notEmpty()
+      .isStrongPassword({
+        minLength: 12,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1,
+      })
+      .withMessage("Password does not meet requirements."),
+  ]
+}
+
 /* ******************************
  * Check data and return errors or continue to registration
  * ***************************** */
@@ -72,6 +129,54 @@ validate.checkRegData = async (req, res, next) => {
       account_firstname,
       account_lastname,
       account_email,
+    })
+    return
+  }
+  next()
+}
+
+/* ******************************
+ * Check update account data and return errors or continue
+ * ***************************** */
+validate.checkUpdateAccountData = async (req, res, next) => {
+  const { account_firstname, account_lastname, account_email } = req.body
+  let errors = []
+  errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav()
+    let navList = []
+    let active = ""
+    res.render("account/update-account", {
+      errors,
+      title: "Update Account",
+      nav,
+      navList,
+      active,
+      account_firstname,
+      account_lastname,
+      account_email,
+    })
+    return
+  }
+  next()
+}
+
+/* ******************************
+ * Check update password data and return errors or continue
+ * ***************************** */
+validate.checkUpdatePasswordData = async (req, res, next) => {
+  let errors = []
+  errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav()
+    let navList = []
+    let active = ""
+    res.render("account/update-account", {
+      errors,
+      title: "Update Account",
+      nav,
+      navList,
+      active,
     })
     return
   }

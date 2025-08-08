@@ -1,0 +1,233 @@
+<main class="update-account-main">
+  <h1><%= title %></h1>
+  <%- messages() %>
+  
+  <% if (errors) { %>
+    <ul class="notice">
+      <% errors.array().forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+  
+  <div class="forms-container">
+    <!-- Account Update Form -->
+    <div class="form-section">
+      <h2>Account Update</h2>
+      <form class="update-form" action="/account/update" method="post">
+        <input type="hidden" name="account_id" value="<%= accountData.account_id %>">
+        
+        <div class="form-group">
+          <label for="account_firstname">First Name:</label>
+          <input 
+            type="text" 
+            name="account_firstname" 
+            id="account_firstname" 
+            required 
+            value="<%= locals.account_firstname || accountData.account_firstname %>"
+          >
+        </div>
+        
+        <div class="form-group">
+          <label for="account_lastname">Last Name:</label>
+          <input 
+            type="text" 
+            name="account_lastname" 
+            id="account_lastname" 
+            required 
+            value="<%= locals.account_lastname || accountData.account_lastname %>"
+          >
+        </div>
+        
+        <div class="form-group">
+          <label for="account_email">Email:</label>
+          <input 
+            type="email" 
+            name="account_email" 
+            id="account_email" 
+            required 
+            value="<%= locals.account_email || accountData.account_email %>"
+          >
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Update Account</button>
+      </form>
+    </div>
+    
+    <!-- Change Password Form -->
+    <div class="form-section">
+      <h2>Change Password</h2>
+      <form class="password-form" action="/account/update-password" method="post">
+        <input type="hidden" name="account_id" value="<%= accountData.account_id %>">
+        
+        <div class="form-group">
+          <label for="account_password">New Password:</label>
+          <input 
+            type="password" 
+            name="account_password" 
+            id="account_password" 
+            required
+          >
+          <small class="password-help">
+            Password must be at least 12 characters long and contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.
+          </small>
+        </div>
+        
+        <button type="submit" class="btn btn-secondary">Change Password</button>
+      </form>
+    </div>
+  </div>
+  
+  <div class="form-actions">
+    <a href="/account/" class="btn btn-cancel">Back to Account Management</a>
+  </div>
+</main>
+
+<style>
+.update-account-main {
+  max-width: 800px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.update-account-main h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+}
+
+.forms-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.form-section {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.form-section h2 {
+  margin: 0 0 1.5rem 0;
+  color: #2c3e50;
+  font-size: 1.5rem;
+}
+
+.update-form,
+.password-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.form-group input {
+  padding: 0.75rem;
+  border: 2px solid #ecf0f1;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.password-help {
+  font-size: 0.875rem;
+  color: #6c757d;
+  margin-top: 0.25rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: #3498db;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #2980b9;
+}
+
+.btn-secondary {
+  background: #f39c12;
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background: #e67e22;
+}
+
+.btn-cancel {
+  background: #95a5a6;
+  color: #fff;
+}
+
+.btn-cancel:hover {
+  background: #7f8c8d;
+}
+
+.form-actions {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.notice {
+  background: #e74c3c;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  list-style: none;
+}
+
+.notice li {
+  margin-bottom: 0.5rem;
+}
+
+/* Validation styling */
+input:required:invalid, input:focus:invalid {
+  border-color: #e74c3c;
+  background-color: #fdf2f2;
+}
+
+input:required:valid {
+  border-color: #27ae60;
+  background-color: #f8fff8;
+}
+
+@media (max-width: 768px) {
+  .forms-container {
+    grid-template-columns: 1fr;
+  }
+}
+</style> 
