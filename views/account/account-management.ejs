@@ -18,12 +18,15 @@
   
   <div class="account-actions">
     <a href="/account/update/<%= accountData.account_id %>" class="btn btn-update">Update Account Information</a>
+    <a href="/reviews/my-reviews" class="btn btn-secondary">My Reviews</a>
   </div>
   
   <% if (accountData.account_type === "Employee" || accountData.account_type === "Admin") { %>
     <div class="admin-actions">
       <h3>Inventory Management</h3>
       <p><a href="/inv/" class="btn">Manage Inventory</a></p>
+      <h3>Review Management</h3>
+      <p><a href="/reviews/manage" class="btn">Manage Reviews</a></p>
     </div>
   <% } %>
   

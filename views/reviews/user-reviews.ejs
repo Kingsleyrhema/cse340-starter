@@ -1,0 +1,309 @@
+<main class="user-reviews-main">
+  <h1><%= title %></h1>
+  <%- messages() %>
+  
+  <div class="reviews-container">
+    <% if (reviews && reviews.length > 0) { %>
+      <div class="reviews-header">
+        <p>You have written <%= reviews.length %> review<%= reviews.length === 1 ? '' : 's' %>.</p>
+      </div>
+      
+      <div class="reviews-grid">
+        <% reviews.forEach(review => { %>
+          <div class="review-card">
+            <div class="review-header">
+              <h3><%= review.inv_year %> <%= review.inv_make %> <%= review.inv_model %></h3>
+              <div class="review-status">
+                <span class="status-badge <%= review.is_approved ? 'approved' : 'pending' %>">
+                  <%= review.is_approved ? 'Approved' : 'Pending' %>
+                </span>
+              </div>
+            </div>
+            
+            <div class="review-content">
+              <div class="review-title-rating">
+                <h4><%= review.review_title %></h4>
+                <div class="rating">
+                  <% for(let i = 1; i <= 5; i++) { %>
+                    <span class="star <%= i <= review.review_rating ? 'filled' : '' %>">★</span>
+                  <% } %>
+                </div>
+              </div>
+              
+              <p class="review-text"><%= review.review_text.length > 150 ? review.review_text.substring(0, 150) + '...' : review.review_text %></p>
+              
+              <div class="review-meta">
+                <small>Posted: <%= new Date(review.review_date).toLocaleDateString() %></small>
+                <% if (review.updated_at && review.updated_at !== review.review_date) { %>
+                  <small>Updated: <%= new Date(review.updated_at).toLocaleDateString() %></small>
+                <% } %>
+              </div>
+            </div>
+            
+            <div class="review-actions">
+              <a href="/reviews/edit/<%= review.review_id %>" class="btn btn-primary btn-sm">Edit</a>
+              <a href="/reviews/delete/<%= review.review_id %>" class="btn btn-danger btn-sm">Delete</a>
+              <a href="/inv/detail/<%= review.inv_id %>" class="btn btn-secondary btn-sm">View Vehicle</a>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="no-reviews">
+        <div class="no-reviews-icon">📝</div>
+        <h2>No Reviews Yet</h2>
+        <p>You haven't written any reviews yet. Browse our inventory and share your experience with vehicles you've owned or driven!</p>
+        <a href="/inv/" class="btn btn-primary">Browse Inventory</a>
+      </div>
+    <% } %>
+  </div>
+  
+  <div class="navigation-actions">
+    <a href="/account/" class="btn btn-secondary">Back to Account</a>
+    <a href="/reviews/all" class="btn btn-outline">View All Reviews</a>
+  </div>
+</main>
+
+<style>
+.user-reviews-main {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.user-reviews-main h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+}
+
+.reviews-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.reviews-header p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.review-card {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.review-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.review-header h3 {
+  margin: 0;
+  color: #3498db;
+  font-size: 1.2rem;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.status-badge.approved {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-badge.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.review-title-rating {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.review-title-rating h4 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 1.1rem;
+}
+
+.rating {
+  display: flex;
+  gap: 0.1rem;
+}
+
+.star {
+  font-size: 1rem;
+  color: #ddd;
+}
+
+.star.filled {
+  color: #ffc107;
+}
+
+.review-text {
+  margin: 0 0 1rem 0;
+  line-height: 1.6;
+  color: #555;
+}
+
+.review-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.review-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.no-reviews {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.no-reviews-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.no-reviews h2 {
+  color: #2c3e50;
+  margin: 0 0 1rem 0;
+}
+
+.no-reviews p {
+  color: #555;
+  margin: 0 0 2rem 0;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.navigation-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.btn-primary {
+  background: #3498db;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #2980b9;
+}
+
+.btn-secondary {
+  background: #95a5a6;
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background: #7f8c8d;
+}
+
+.btn-danger {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: #c0392b;
+}
+
+.btn-outline {
+  background: transparent;
+  color: #3498db;
+  border: 2px solid #3498db;
+}
+
+.btn-outline:hover {
+  background: #3498db;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .reviews-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .review-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .review-title-rating {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .review-meta {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .navigation-actions {
+    flex-direction: column;
+  }
+}
+</style>

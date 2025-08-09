@@ -1,0 +1,387 @@
+<main class="manage-reviews-main">
+  <h1><%= title %></h1>
+  <%- messages() %>
+  
+  <div class="management-container">
+    <!-- Statistics Dashboard -->
+    <div class="stats-dashboard">
+      <h2>Review Statistics</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number"><%= stats.total_reviews || 0 %></div>
+          <div class="stat-label">Total Reviews</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number"><%= stats.approved_reviews || 0 %></div>
+          <div class="stat-label">Approved</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number"><%= stats.pending_reviews || 0 %></div>
+          <div class="stat-label">Pending</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number"><%= stats.avg_rating || '0.0' %></div>
+          <div class="stat-label">Avg Rating</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Pending Reviews Section -->
+    <div class="pending-reviews-section">
+      <h2>Pending Reviews (<%= pendingReviews.length %>)</h2>
+      
+      <% if (pendingReviews && pendingReviews.length > 0) { %>
+        <div class="reviews-list">
+          <% pendingReviews.forEach(review => { %>
+            <div class="review-item">
+              <div class="review-info">
+                <div class="vehicle-info">
+                  <h3><%= review.inv_year %> <%= review.inv_make %> <%= review.inv_model %></h3>
+                  <p class="reviewer">by <%= review.account_firstname %> <%= review.account_lastname %></p>
+                </div>
+                
+                <div class="review-content">
+                  <div class="review-header">
+                    <h4><%= review.review_title %></h4>
+                    <div class="rating">
+                      <% for(let i = 1; i <= 5; i++) { %>
+                        <span class="star <%= i <= review.review_rating ? 'filled' : '' %>">★</span>
+                      <% } %>
+                      (<%= review.review_rating %>/5)
+                    </div>
+                  </div>
+                  <p class="review-text"><%= review.review_text %></p>
+                  <div class="review-meta">
+                    <small>Submitted: <%= new Date(review.review_date).toLocaleDateString() %></small>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="review-actions">
+                <form class="action-form" action="/reviews/manage" method="post">
+                  <input type="hidden" name="review_id" value="<%= review.review_id %>">
+                  <button type="submit" name="action" value="approve" class="btn btn-success">
+                    ✓ Approve
+                  </button>
+                  <button type="submit" name="action" value="reject" class="btn btn-warning">
+                    ✗ Reject
+                  </button>
+                  <button type="submit" name="action" value="delete" class="btn btn-danger">
+                    🗑️ Delete
+                  </button>
+                </form>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="no-pending">
+          <div class="no-pending-icon">✅</div>
+          <h3>No Pending Reviews</h3>
+          <p>All reviews have been processed. Great job!</p>
+        </div>
+      <% } %>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <h2>Quick Actions</h2>
+      <div class="actions-grid">
+        <a href="/reviews/all" class="btn btn-outline">View All Reviews</a>
+        <a href="/inv/" class="btn btn-outline">Manage Inventory</a>
+        <a href="/account/" class="btn btn-secondary">Back to Account</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<style>
+.manage-reviews-main {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.manage-reviews-main h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+}
+
+.management-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.stats-dashboard {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.stats-dashboard h2 {
+  margin: 0 0 1rem 0;
+  color: #2c3e50;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.stat-card {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #3498db;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pending-reviews-section {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.pending-reviews-section h2 {
+  margin: 0 0 1.5rem 0;
+  color: #2c3e50;
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.review-item {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  background: #f8f9fa;
+}
+
+.review-info {
+  flex: 1;
+}
+
+.vehicle-info h3 {
+  margin: 0 0 0.5rem 0;
+  color: #3498db;
+  font-size: 1.2rem;
+}
+
+.reviewer {
+  margin: 0 0 1rem 0;
+  color: #6c757d;
+  font-style: italic;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.review-header h4 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 1.1rem;
+}
+
+.rating {
+  display: flex;
+  gap: 0.1rem;
+  align-items: center;
+}
+
+.star {
+  font-size: 1rem;
+  color: #ddd;
+}
+
+.star.filled {
+  color: #ffc107;
+}
+
+.review-text {
+  margin: 0 0 1rem 0;
+  line-height: 1.6;
+  color: #555;
+  background: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+  border: 1px solid #e9ecef;
+}
+
+.review-meta {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.review-actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 150px;
+}
+
+.action-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.no-pending {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.no-pending-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.no-pending h3 {
+  color: #27ae60;
+  margin: 0 0 1rem 0;
+}
+
+.no-pending p {
+  color: #555;
+  margin: 0;
+}
+
+.quick-actions {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.quick-actions h2 {
+  margin: 0 0 1rem 0;
+  color: #2c3e50;
+}
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.btn-success {
+  background: #27ae60;
+  color: #fff;
+}
+
+.btn-success:hover {
+  background: #229954;
+}
+
+.btn-warning {
+  background: #f39c12;
+  color: #fff;
+}
+
+.btn-warning:hover {
+  background: #e67e22;
+}
+
+.btn-danger {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: #c0392b;
+}
+
+.btn-secondary {
+  background: #95a5a6;
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background: #7f8c8d;
+}
+
+.btn-outline {
+  background: transparent;
+  color: #3498db;
+  border: 2px solid #3498db;
+}
+
+.btn-outline:hover {
+  background: #3498db;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .review-item {
+    flex-direction: column;
+  }
+  
+  .review-actions {
+    min-width: auto;
+  }
+  
+  .action-form {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  
+  .review-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .actions-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

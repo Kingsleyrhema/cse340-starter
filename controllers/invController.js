@@ -24,18 +24,46 @@ invCont.buildByClassificationId = async function (req, res, next) {
  *  Build vehicle detail view
  * ************************** */
 invCont.buildDetailView = async function (req, res, next) {
-  const inv_id = req.params.invId;
-  const data = await invModel.getInventoryById(inv_id);
-  const detail = await utilities.buildDetailHTML(data);
-  const navList = await utilities.getClassificationsList();
-  const title = data ? `${data.inv_make} ${data.inv_model}` : 'Vehicle Detail';
-  const active = data ? data.classification_name : '';
-  res.render("./inventory/detail", {
-    title,
-    navList,
-    active,
-    detail,
-  });
+  try {
+    const inv_id = req.params.invId;
+    const data = await invModel.getInventoryById(inv_id);
+    
+    if (!data) {
+      const error = new Error('Vehicle not found');
+      error.status = 404;
+      throw error;
+    }
+    
+    const detail = await utilities.buildDetailHTML(data);
+    const navList = await utilities.getClassificationsList();
+    const title = `${data.inv_make} ${data.inv_model}`;
+    const active = data.classification_name || '';
+    
+    // Get reviews for this vehicle
+    const reviewModel = require("../models/review-model");
+    const reviews = await reviewModel.getReviewsByVehicleId(inv_id);
+    const averageRating = await reviewModel.getAverageRating(inv_id);
+    
+    // Check if current user has already reviewed this vehicle
+    let hasUserReviewed = false;
+    if (res.locals.loggedin) {
+      hasUserReviewed = await reviewModel.hasUserReviewed(inv_id, res.locals.accountData.account_id);
+    }
+    
+    res.render("./inventory/detail", {
+      title,
+      navList,
+      active,
+      detail,
+      vehicleData: data,
+      reviews: reviews.rows || [],
+      averageRating,
+      hasUserReviewed,
+      inv_id
+    });
+  } catch (error) {
+    next(error);
+  }
 }
 
 /* ***************************
