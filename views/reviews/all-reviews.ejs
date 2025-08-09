@@ -1,0 +1,369 @@
+<main class="all-reviews-main">
+  <h1><%= title %></h1>
+  <%- messages() %>
+  
+  <div class="reviews-overview">
+    <div class="stats-section">
+      <h2>Review Statistics</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number"><%= stats.total_reviews || 0 %></span>
+          <span class="stat-label">Total Reviews</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number"><%= stats.approved_reviews || 0 %></span>
+          <span class="stat-label">Approved Reviews</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number"><%= stats.avg_rating || '0.0' %></span>
+          <span class="stat-label">Average Rating</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="navigation-links">
+      <a href="/inv/" class="btn btn-primary">Browse Inventory</a>
+      <% if (locals.loggedin) { %>
+        <a href="/reviews/my-reviews" class="btn btn-secondary">My Reviews</a>
+      <% } %>
+    </div>
+  </div>
+  
+  <div class="reviews-container">
+    <% if (reviews && reviews.length > 0) { %>
+      <div class="reviews-grid">
+        <% reviews.forEach(review => { %>
+          <div class="review-card">
+            <div class="vehicle-header">
+              <h3>
+                <a href="/inv/detail/<%= review.inv_id %>">
+                  <%= review.inv_year %> <%= review.inv_make %> <%= review.inv_model %>
+                </a>
+              </h3>
+            </div>
+            
+            <div class="review-content">
+              <div class="review-title-rating">
+                <h4><%= review.review_title %></h4>
+                <div class="rating">
+                  <% for(let i = 1; i <= 5; i++) { %>
+                    <span class="star <%= i <= review.review_rating ? 'filled' : '' %>">★</span>
+                  <% } %>
+                  <span class="rating-value">(<%= review.review_rating %>/5)</span>
+                </div>
+              </div>
+              
+              <p class="review-text"><%= review.review_text.length > 200 ? review.review_text.substring(0, 200) + '...' : review.review_text %></p>
+              
+              <div class="review-footer">
+                <div class="reviewer-info">
+                  <span class="reviewer-name">by <%= review.account_firstname %> <%= review.account_lastname %></span>
+                  <span class="review-date"><%= new Date(review.review_date).toLocaleDateString() %></span>
+                </div>
+                <a href="/inv/detail/<%= review.inv_id %>" class="btn btn-sm btn-outline">View Vehicle</a>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="no-reviews">
+        <div class="no-reviews-icon">📝</div>
+        <h2>No Reviews Yet</h2>
+        <p>Be the first to share your experience with our vehicles!</p>
+        <a href="/inv/" class="btn btn-primary">Browse Inventory</a>
+      </div>
+    <% } %>
+  </div>
+  
+  <div class="page-footer">
+    <a href="/" class="btn btn-secondary">Back to Home</a>
+  </div>
+</main>
+
+<style>
+.all-reviews-main {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.all-reviews-main h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+}
+
+.reviews-overview {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.stats-section h2 {
+  margin: 0 0 1rem 0;
+  color: #2c3e50;
+}
+
+.stats-grid {
+  display: flex;
+  gap: 2rem;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #3498db;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.navigation-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.review-card {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.review-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.vehicle-header {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.vehicle-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.vehicle-header a {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.vehicle-header a:hover {
+  text-decoration: underline;
+}
+
+.review-title-rating {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.review-title-rating h4 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 1.1rem;
+  flex: 1;
+  margin-right: 1rem;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.star {
+  font-size: 1rem;
+  color: #ddd;
+}
+
+.star.filled {
+  color: #ffc107;
+}
+
+.rating-value {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-left: 0.5rem;
+}
+
+.review-text {
+  margin: 0 0 1rem 0;
+  line-height: 1.6;
+  color: #555;
+}
+
+.review-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f1f1f1;
+}
+
+.reviewer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.reviewer-name {
+  font-weight: bold;
+  color: #2c3e50;
+  font-size: 0.9rem;
+}
+
+.review-date {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.no-reviews {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.no-reviews-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.no-reviews h2 {
+  color: #2c3e50;
+  margin: 0 0 1rem 0;
+}
+
+.no-reviews p {
+  color: #555;
+  margin: 0 0 2rem 0;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.page-footer {
+  text-align: center;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid #e9ecef;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.btn-primary {
+  background: #3498db;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #2980b9;
+}
+
+.btn-secondary {
+  background: #95a5a6;
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background: #7f8c8d;
+}
+
+.btn-outline {
+  background: transparent;
+  color: #3498db;
+  border: 2px solid #3498db;
+}
+
+.btn-outline:hover {
+  background: #3498db;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .reviews-overview {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  
+  .navigation-links {
+    align-items: center;
+  }
+  
+  .stats-grid {
+    justify-content: center;
+  }
+  
+  .reviews-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .review-title-rating {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+  
+  .review-footer {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+}
+</style>

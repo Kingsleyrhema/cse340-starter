@@ -1,0 +1,286 @@
+<main class="add-review-main">
+  <h1><%= title %></h1>
+  <%- messages() %>
+  
+  <% if (errors) { %>
+    <ul class="notice">
+      <% errors.array().forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+  
+  <div class="review-container">
+    <!-- Vehicle Information -->
+    <div class="vehicle-info-card">
+      <h2>Vehicle Information</h2>
+      <div class="vehicle-summary">
+        <div class="vehicle-details">
+          <h3><%= vehicleData.inv_year %> <%= vehicleData.inv_make %> <%= vehicleData.inv_model %></h3>
+          <p><strong>Price:</strong> $<%= new Intl.NumberFormat('en-US').format(vehicleData.inv_price) %></p>
+          <p><strong>Mileage:</strong> <%= new Intl.NumberFormat('en-US').format(vehicleData.inv_miles) %> miles</p>
+          <p><strong>Color:</strong> <%= vehicleData.inv_color %></p>
+        </div>
+        <div class="vehicle-image">
+          <img src="<%= vehicleData.inv_thumbnail %>" alt="<%= vehicleData.inv_make %> <%= vehicleData.inv_model %>">
+        </div>
+      </div>
+    </div>
+    
+    <!-- Review Form -->
+    <div class="review-form-section">
+      <h2>Write Your Review</h2>
+      <form class="review-form" action="/reviews/add" method="post">
+        <input type="hidden" name="inv_id" value="<%= vehicleData.inv_id %>">
+        
+        <div class="form-group">
+          <label for="review_title">Review Title:</label>
+          <input 
+            type="text" 
+            name="review_title" 
+            id="review_title" 
+            required 
+            maxlength="100"
+            placeholder="Give your review a title..."
+            value="<%= locals.review_title || '' %>"
+          >
+          <small>5-100 characters</small>
+        </div>
+        
+        <div class="form-group">
+          <label for="review_rating">Rating:</label>
+          <div class="rating-input">
+            <select name="review_rating" id="review_rating" required>
+              <option value="">Select Rating</option>
+              <option value="5" <%= locals.review_rating == 5 ? 'selected' : '' %>>★★★★★ (5 stars) - Excellent</option>
+              <option value="4" <%= locals.review_rating == 4 ? 'selected' : '' %>>★★★★☆ (4 stars) - Very Good</option>
+              <option value="3" <%= locals.review_rating == 3 ? 'selected' : '' %>>★★★☆☆ (3 stars) - Good</option>
+              <option value="2" <%= locals.review_rating == 2 ? 'selected' : '' %>>★★☆☆☆ (2 stars) - Fair</option>
+              <option value="1" <%= locals.review_rating == 1 ? 'selected' : '' %>>★☆☆☆☆ (1 star) - Poor</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="review_text">Your Review:</label>
+          <textarea 
+            name="review_text" 
+            id="review_text" 
+            required
+            maxlength="1000"
+            rows="6"
+            placeholder="Share your experience with this vehicle..."
+          ><%= locals.review_text || '' %></textarea>
+          <small>10-1000 characters</small>
+        </div>
+        
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Submit Review</button>
+          <a href="/inv/detail/<%= vehicleData.inv_id %>" class="btn btn-cancel">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+
+<style>
+.add-review-main {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.add-review-main h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+}
+
+.review-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.vehicle-info-card {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  height: fit-content;
+}
+
+.vehicle-info-card h2 {
+  margin: 0 0 1rem 0;
+  color: #2c3e50;
+  font-size: 1.3rem;
+}
+
+.vehicle-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.vehicle-details h3 {
+  margin: 0 0 1rem 0;
+  color: #3498db;
+  font-size: 1.2rem;
+}
+
+.vehicle-details p {
+  margin: 0.5rem 0;
+  color: #555;
+}
+
+.vehicle-image img {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.review-form-section {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.review-form-section h2 {
+  margin: 0 0 1.5rem 0;
+  color: #2c3e50;
+  font-size: 1.3rem;
+}
+
+.review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 0.75rem;
+  border: 2px solid #ecf0f1;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.form-group small {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.rating-input select {
+  font-size: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: #3498db;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #2980b9;
+}
+
+.btn-cancel {
+  background: #95a5a6;
+  color: #fff;
+}
+
+.btn-cancel:hover {
+  background: #7f8c8d;
+}
+
+.notice {
+  background: #e74c3c;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  list-style: none;
+}
+
+.notice li {
+  margin-bottom: 0.5rem;
+}
+
+/* Validation styling */
+input:required:invalid,
+select:required:invalid,
+textarea:required:invalid {
+  border-color: #e74c3c;
+}
+
+input:required:valid,
+select:required:valid,
+textarea:required:valid {
+  border-color: #27ae60;
+}
+
+@media (max-width: 768px) {
+  .review-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .vehicle-summary {
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .vehicle-image {
+    flex-shrink: 0;
+  }
+  
+  .vehicle-image img {
+    max-width: 150px;
+  }
+}
+</style>

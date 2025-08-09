@@ -1,0 +1,275 @@
+<main class="edit-review-main">
+  <h1><%= title %></h1>
+  <%- messages() %>
+  
+  <% if (errors) { %>
+    <ul class="notice">
+      <% errors.array().forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+  
+  <div class="review-container">
+    <!-- Vehicle Information -->
+    <div class="vehicle-info-card">
+      <h2>Vehicle Information</h2>
+      <div class="vehicle-summary">
+        <div class="vehicle-details">
+          <h3><%= reviewData.inv_year %> <%= reviewData.inv_make %> <%= reviewData.inv_model %></h3>
+          <p><strong>Original Review Date:</strong> <%= new Date(reviewData.review_date).toLocaleDateString() %></p>
+          <p><strong>Current Status:</strong> 
+            <span class="status-<%= reviewData.is_approved ? 'approved' : 'pending' %>">
+              <%= reviewData.is_approved ? 'Approved' : 'Pending Approval' %>
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Edit Review Form -->
+    <div class="review-form-section">
+      <h2>Edit Your Review</h2>
+      <p class="edit-note">Note: Editing your review will require re-approval before it appears on the vehicle page.</p>
+      
+      <form class="review-form" action="/reviews/edit" method="post">
+        <input type="hidden" name="review_id" value="<%= reviewData.review_id %>">
+        
+        <div class="form-group">
+          <label for="review_title">Review Title:</label>
+          <input 
+            type="text" 
+            name="review_title" 
+            id="review_title" 
+            required 
+            maxlength="100"
+            value="<%= locals.review_title || reviewData.review_title %>"
+          >
+          <small>5-100 characters</small>
+        </div>
+        
+        <div class="form-group">
+          <label for="review_rating">Rating:</label>
+          <div class="rating-input">
+            <select name="review_rating" id="review_rating" required>
+              <option value="">Select Rating</option>
+              <option value="5" <%= (locals.review_rating || reviewData.review_rating) == 5 ? 'selected' : '' %>>★★★★★ (5 stars) - Excellent</option>
+              <option value="4" <%= (locals.review_rating || reviewData.review_rating) == 4 ? 'selected' : '' %>>★★★★☆ (4 stars) - Very Good</option>
+              <option value="3" <%= (locals.review_rating || reviewData.review_rating) == 3 ? 'selected' : '' %>>★★★☆☆ (3 stars) - Good</option>
+              <option value="2" <%= (locals.review_rating || reviewData.review_rating) == 2 ? 'selected' : '' %>>★★☆☆☆ (2 stars) - Fair</option>
+              <option value="1" <%= (locals.review_rating || reviewData.review_rating) == 1 ? 'selected' : '' %>>★☆☆☆☆ (1 star) - Poor</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="review_text">Your Review:</label>
+          <textarea 
+            name="review_text" 
+            id="review_text" 
+            required
+            maxlength="1000"
+            rows="6"
+          ><%= locals.review_text || reviewData.review_text %></textarea>
+          <small>10-1000 characters</small>
+        </div>
+        
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Update Review</button>
+          <a href="/reviews/my-reviews" class="btn btn-cancel">Cancel</a>
+          <a href="/reviews/delete/<%= reviewData.review_id %>" class="btn btn-danger">Delete Review</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+
+<style>
+.edit-review-main {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.edit-review-main h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+}
+
+.review-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.vehicle-info-card {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  height: fit-content;
+}
+
+.vehicle-info-card h2 {
+  margin: 0 0 1rem 0;
+  color: #2c3e50;
+  font-size: 1.3rem;
+}
+
+.vehicle-details h3 {
+  margin: 0 0 1rem 0;
+  color: #3498db;
+  font-size: 1.2rem;
+}
+
+.vehicle-details p {
+  margin: 0.5rem 0;
+  color: #555;
+}
+
+.status-approved {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.status-pending {
+  color: #f39c12;
+  font-weight: bold;
+}
+
+.review-form-section {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.review-form-section h2 {
+  margin: 0 0 1rem 0;
+  color: #2c3e50;
+  font-size: 1.3rem;
+}
+
+.edit-note {
+  background: #fff3cd;
+  color: #856404;
+  padding: 0.75rem;
+  border-radius: 5px;
+  margin-bottom: 1.5rem;
+  border: 1px solid #ffeaa7;
+}
+
+.review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 0.75rem;
+  border: 2px solid #ecf0f1;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.form-group small {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: #3498db;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #2980b9;
+}
+
+.btn-cancel {
+  background: #95a5a6;
+  color: #fff;
+}
+
+.btn-cancel:hover {
+  background: #7f8c8d;
+}
+
+.btn-danger {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: #c0392b;
+}
+
+.notice {
+  background: #e74c3c;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  list-style: none;
+}
+
+.notice li {
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .review-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+}
+</style>

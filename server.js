@@ -16,6 +16,7 @@ const utilities = require("./utilities/")
 const session = require("express-session")
 const pool = require('./database/')
 const accountRoute = require("./routes/accountRoute")
+const reviewRoute = require("./routes/reviewRoute")
 const bodyParser = require("body-parser")
 const cookieParser = require("cookie-parser")
 
@@ -75,6 +76,9 @@ app.use("/inv", inventoryRoute)
 
 // Account routes
 app.use("/account", accountRoute)
+
+// Review routes
+app.use("/reviews", reviewRoute)
 
 // Intentional 500 error test route
 app.get("/error-test", utilities.handleErrors(baseController.triggerError));
